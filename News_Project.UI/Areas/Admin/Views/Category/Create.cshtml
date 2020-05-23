@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayoutPage.cshtml";
+}
+@model News_Project.UI.Areas.Admin.Data.DTO.CategoryDTO
+    <section class="content">
+        <div class="row">
+            <div class="col-md-6">
+
+                @Html.Partial("~/Areas/Admin/Views/Shared/Partial/_FormMessagess.cshtml")
+
+                <div class="box box-danger">
+                    <div class="box-header">
+                        <h4>Add News Category</h4>
+                    </div>
+                    <div class="box-body">
+
+                        @using (Html.BeginForm("Create", "Category", "Admin", FormMethod.Post))
+                        {
+                            @*@Html.ValidationSummary()*@
+                            <div class="form-group">
+                             
+                                @Html.TextBoxFor(x => x.Name, new { @class = "form-control", @placeholder = "News Category Name" })
+                                @Html.ValidationMessageFor(x => x.Name)
+                            </div>
+                            <div class="form-group" style="float:right">
+                                <button type="submit" class="btn btn-danger">Submit</button>
+                            </div>
+                        }                                              
+                    </div>
+                    <div class="box-footer">
+                        
+                        @Html.ActionLink("Back To List","List","Category","Admin", new {@class="btn btn-warning btn-block",Type="button" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
