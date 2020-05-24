@@ -128,6 +128,14 @@
     <Compile Include="Areas\Admin\Data\Helper\FormMessages.cs" />
     <Compile Include="Areas\Admin\Data\VM\CreatePostVM.cs" />
     <Compile Include="Areas\Admin\Data\VM\UpdatePostVM.cs" />
+    <Compile Include="Areas\Member\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Member\Controllers\PostController.cs" />
+    <Compile Include="Areas\Member\Data\DTO\AppUserDTO.cs" />
+    <Compile Include="Areas\Member\Data\DTO\CommentDTO.cs" />
+    <Compile Include="Areas\Member\Data\DTO\LikeDTO.cs" />
+    <Compile Include="Areas\Member\Data\DTO\PostDTO.cs" />
+    <Compile Include="Areas\Member\Data\VM\HomePageVM.cs" />
+    <Compile Include="Areas\Member\Data\VM\PostDetailVM.cs" />
     <Compile Include="Areas\Member\MemberAreaRegistration.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -162,6 +170,9 @@
     <Content Include="Areas\Admin\Views\Shared\Partial\_FormMessagess.cshtml" />
     <Content Include="Areas\Admin\Views\Post\Update.cshtml" />
     <Content Include="Areas\Member\Views\web.config" />
+    <Content Include="Areas\Member\Views\Shared\_MemberLayoutPage.cshtml" />
+    <Content Include="Areas\Member\Views\Post\PostDetails.cshtml" />
+    <Content Include="Areas\Member\Views\Home\Index.cshtml" />
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -172,9 +183,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Member\Controllers\" />
-    <Folder Include="Areas\Member\Data\" />
-    <Folder Include="Areas\Member\Views\Shared\" />
     <Folder Include="Controllers\" />
     <Folder Include="Models\" />
   </ItemGroup>

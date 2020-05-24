@@ -71,7 +71,15 @@ namespace News_Project.UI.Areas.Admin.Controllers
             _categoryRepository.Update(category);
             return Redirect("/Admin/Category/List");
         }
-        public ActionResult Delete (int id)
+
+        //public JsonResult Delete(int id)
+        //{
+        //    _categoryRepository.Remove(id);
+        //    return Json("/Admin/Category/List");
+        //}
+
+
+        public ActionResult Delete(int id)
         {
             _categoryRepository.Remove(id);
             return Redirect("/Admin/Category/List");

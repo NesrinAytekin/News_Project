@@ -1,0 +1,189 @@
+﻿
+@{
+    ViewBag.Title = "PostDetails";
+    Layout = "~/Areas/Member/Views/Shared/_MemberLayoutPage.cshtml";
+}
+
+@model News_Project.UI.Areas.Member.Data.VM.PostDetailVM
+
+<div class="container">
+    <div class="content">
+        <div class="row">
+            <div class="col-md-10">
+                <div class="box box-widget">
+                    <div class="box-header with-border">
+                        <div class="user-block">
+                            <img class="img-circle" src="@Model.AppUser.UserImage" alt="User Image">
+                            <span class="username"><a href="#">@Model.AppUser.FirstName @Model.AppUser.LastName</a></span> 
+                            <span class="description">Shared publicly - @Model.Post.CreateDate.ToShortDateString()</span>
+                        </div>
+                        <!-- /.user-block -->
+                        @*<div class="box-tools">
+                            <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="" data-original-title="Mark as read">
+                                <i class="fa fa-circle-o"></i>
+                            </button>
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                        </div>*@
+                        <!-- /.box-tools -->
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body " id="articleList">
+                        <img class="img-responsive pad" src="@Model.Post.ImagePath" alt="Photo">
+                        @*<-->Alttaki if blogu Id doğrulanması için oluşturulur</-->*@
+                        @if (!(Model.Post.Likes.Any(x=>x.AppUser.UserName==User.Identity.Name)))
+                        {
+                            string elemetId = "message" + Model.Post.Id;
+                            <button type="button" id="like" onclick="like(@Model.Post.Id)" class="btn btn-default btn-xs"><i class="fa fa-thumbs-o-up"></i> Like</button>
+                            <span id="@elemetId" style="display:none">Like You</span>
+                        }
+                        
+                        <span class="pull-right text-muted">@Model.Likes.Count likes - @Model.Comments.Count comments</span>
+                        <p>
+                            <center><h4>@Model.Post.Header</h4></center>
+                        </p>
+                        <p>
+                          @Model.Post.Content  
+                        </p>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer box-comments " id="dynamicComment">
+                        @foreach (var item in Model.Comments)
+                        {
+                        <div class="box-comment" id="a_@item.Id">
+                            <!-- User image -->
+                            <img class="img-circle img-sm" src="@item.AppUser.UserName" alt="User Image">
+
+                            <div class="comment-text">
+                                <span class="username">
+                                    @item.AppUser.FirstName @item.AppUser.LastName
+                                    <span class="text-muted pull-right">@item.CreateDate.ToShortDateString() Today</span>
+                                </span><!-- /.username -->
+                                @if (item.AppUser.UserName == User.Identity.Name)
+                                {
+                                    <button type="button" id="edit" class="btn btn-warning btn-xs"></button> 
+                                    @*<a href="#" id="edit" class ="btn btn-warning btn-xs"><i class="fa fa-edit"></i></a>*@
+                                    <a href="#" id="commentDelete" type="button" onclick="Comment(@item.Id)" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></a>
+
+                                }
+                                @item.Content
+                            </div>
+                            <!-- /.comment-text -->
+                        </div>
+                        }
+                    </div>
+                    <!-- /.box-footer -->
+                    <div class="box-footer">
+                        <form action="#" method="post">
+                            <img class="img-responsive img-circle img-sm" src="@Session["ImagePath"]" alt="Alt Text">
+                            <!-- .img-push is used to add margin to elements next to floating images -->
+                            <div class="img-push">
+                                <input type="text" class="form-control input-sm" placeholder="Press enter to post comment">
+                                <button type="button" id="addComment" onclick="comment('@Model.Post.Id')" class="btn btn-info btn-xs"><i class="fa fa-thumbs-up"></i></button> 
+                                <span id="message" style="display:none">Have commments</span>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.box-footer -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+ 
+<script>
+
+    /*Toplu data olmadıgı için URL ile taşımam yeterli. CommetControllar'da DeleteComment metoduna git diyoruz. Giderkende Yakalmış oldugun İd'yi yanında taşı diyoruz. Daha Sonra a_ şeklinde tanımlamış oldugum id'yide kaldır diyorum.*/
+
+    function commentDelete(id) {  
+        $.ajax({
+            type: "POST",   /*Taşıma Şekli Post*/
+            url: "@Url.Action("DeleteComment","Comment")/" + id,  
+            success: function (data) {
+                $("#a_" + id).fadeOut();              /*fadeout() verinin ortadan kalkması için*/
+            }
+        });
+    } 
+
+    //Aşağıda Datayı post etme operasyonu yapıyoruz JSon'la//
+
+    function like(id) {
+        $.ajax({
+            type: "POST",
+            dataType: "Json",
+            url: "@Url.Action("AddLike","Like")/" + id, /*LikeController altında AddLike metoduna gidecek diyoruz.*/
+            success: function (data)
+            {
+                if (data.isSuccess == true)
+                {
+                    $("#message" + id).removeAttr(""); /*Like atma işlemi başarılı olursa mesaj kısmını kaldırıp (removeAttr("")=boşluk atmak için) onun yerine boşluk bırak diyoruz.*/
+                    $("#like").remove(); /*Like'ı Kaldırıyor'*/
+                    $("#message" + id).html(""); /*Id ile Html'e ekliyor.*/
+                    $("#message" + id).append(data.userMassage);
+                    $("#commentcount").hide().fadeOut(2000);
+                    $("#articleList").append("<span class='pull-right text-muted' id='commentcount'>" + data.Likes + " likes " + data.Comments + " comments</span>");
+                }
+                else
+                {
+                    $("#message" + id).removeAttr("");
+                    $("#like").remove();
+                    $("#message" + id).html("");
+                    $("#message" + id).append(data.userMassage);
+                }  
+            }
+        });
+    } 
+
+    function comment(postId) {
+        var commentText = $("#comment").val()
+        
+        $.ajax({
+            type: "POST",
+            dataType: "Json",
+            data: {
+                userComment: commentText,
+                id: postId               
+            },
+            url: "@Url.Action("AddComment", "Comment")",
+            success: function (data) {
+                if (data == true) {
+                    $("#message").removeAttr("style");
+                    $("#message").html("");
+                    $("#message").append("Have commments").fadeIn(2000);
+
+                    commentDynamicList(postId);
+                }
+                else {
+                    $("#message").removeAttr("style");
+                    $("#message").html("");
+                    $("#message").append("An error has occured..!");
+                }
+            }
+        })
+    } 
+
+     function commentDynamicList(id) {
+        $.ajax({
+            type: "POST",
+            dataType: "Json",
+            url: "@Url.Action("GetPostCommnet","Comment")/" + id,
+            success: function (data) {
+                if (data != null) {
+                    $("#dynamicComment").append("<div class='box - comment'>< !--User image-- ><img class='img-circle img-sm' src='" + data.AppUser.ImagePath + "' alt='User Image'><div class='comment-text'><span class='username'>" + data.AppUser.UserName + "<span class='text-muted pull right'>" + data.CreateDate + "</span></span><!-- /.username -->" + data.Post.Content + "</div><!-- /.comment-text --></div>");
+                    $("#commnetcount").hide().fadeOut(2000);
+                    $("#articleList").append("<span class='pull-right text-muted' id='commentcount'>" + data.Likes + " likes " + data.Comments + " commnets</span>");
+                    $("#comment").val("");
+                    $("#message").fadeOut(2000);
+                    $("#lastcomment").hide().fadeIn(2000);
+                }
+                else {
+
+                }
+            }
+        })
+    }
+</script>
