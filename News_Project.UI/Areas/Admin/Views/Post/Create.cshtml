@@ -14,6 +14,7 @@
                     <h4>Create A Post</h4>
                 </div>
                 <div class="box-body">
+                    @Html.ValidationSummary()
                     <form action="/Admin/Post/Create" method="post" role="form" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="Header">Header</label>
@@ -47,9 +48,9 @@
                             <label for="Image">Choose A Image</label>
                             <input type="file" name="Image" class="form-control btn btn-default" />
                         </div>
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                </div>              
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
                     </form>
                 </div>
                 <div class="box-footer">

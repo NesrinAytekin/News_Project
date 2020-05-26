@@ -13,6 +13,7 @@
                 </div>
                 <div class="box-body">
                     <form action="/Admin/AppUser/Create" method="post" role="form" enctype="multipart/form-data">
+                        @Html.ValidationSummary()
                         <div class="form-group">
                             <label for="FirstName">First Name</label>
                             <input type="text" name="FirstName" class="form-control" placeholder="First Name" />

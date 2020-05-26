@@ -24,24 +24,44 @@ namespace News_Project.UI.Areas.Admin.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult Create(AppUser data, HttpPostedFileBase Image)
+        public ActionResult Create(AppUserDTO data, HttpPostedFileBase Image)
         {
-            List<string> UploadImagePaths = new List<string>();
-            UploadImagePaths = ImageUploader.UploadSingleImage(ImageUploader.OriginalProfileImagePath, Image, 1);
-            data.UserImage = UploadImagePaths[0];
-            if (data.UserImage == "0" || data.UserImage == "1" | data.UserImage == "2")
+            if (ModelState.IsValid)
             {
-                data.UserImage = ImageUploader.DefaultProfileImagePath;
-                data.XSmallUserImage = ImageUploader.DefaultXSmallProfileImage;
-                data.CruptedUserImage = ImageUploader.DefaulCruptedProfileImage;
+                
+
+                List<string> UploadImagePaths = new List<string>();
+                UploadImagePaths = ImageUploader.UploadSingleImage(ImageUploader.OriginalProfileImagePath, Image, 1);
+                data.UserImage = UploadImagePaths[0];
+                if (data.UserImage == "0" || data.UserImage == "1" | data.UserImage == "2")
+                {
+                    data.UserImage = ImageUploader.DefaultProfileImagePath;
+                    data.XSmallUserImage = ImageUploader.DefaultXSmallProfileImage;
+                    data.CruptedUserImage = ImageUploader.DefaulCruptedProfileImage;
+                }
+                else
+                {
+                    data.XSmallUserImage = UploadImagePaths[1];
+                    data.CruptedUserImage = UploadImagePaths[2];
+                }
+                AppUser appUser = new AppUser();
+                appUser.Id = data.Id;
+                appUser.FirstName = data.FirstName;
+                appUser.LastName = data.LastName;
+                appUser.UserName = data.UserName;
+                appUser.Password = data.Password;
+                appUser.Role = data.Role;
+                appUser.Gender = data.Gender;
+                appUser.UserImage = data.UserImage;
+                appUser.XSmallUserImage = data.XSmallUserImage;
+                appUser.CruptedUserImage = data.CruptedUserImage;
+                _appUserRepository.Add(appUser);
+                return Redirect("/Admin/AppUser/List");
             }
             else
             {
-                data.XSmallUserImage = UploadImagePaths[1];
-                data.CruptedUserImage = UploadImagePaths[2];
+                return View();
             }
-            _appUserRepository.Add(data);
-            return Redirect("/Admin/AppUser/List");
         }
 
         
@@ -57,7 +77,7 @@ namespace News_Project.UI.Areas.Admin.Controllers
             model.Role = appUser.Role;
             model.Gender = appUser.Gender;
             model.UserImage = appUser.UserImage;
-            model.XSmallUserImage = appUser.UserImage;
+            model.XSmallUserImage = appUser.XSmallUserImage;
             model.CruptedUserImage = appUser.CruptedUserImage;
             return View(model);
 
