@@ -63,9 +63,9 @@
                                     </span><!-- /.username -->
                                     @if (item.AppUser.UserName == User.Identity.Name)
                                     {
-                                        <button type="button" id="edit" class="btn btn-warning btn-xs"></button>
+                                        @*<button type="button" id="edit" class="btn btn-warning btn-xs"></button>*@
                                         @*<a href="#" id="edit" class ="btn btn-warning btn-xs"><i class="fa fa-edit"></i></a>*@
-                                        <a href="#" id="commentDelete" type="button" onclick="Comment(@item.Id)" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></a>
+                                        <a href="#"  type="button" onclick="commentDelete(@item.Id)" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></a>
 
                                     }
                                     @item.Content
@@ -76,15 +76,15 @@
                     </div>
                     <!-- /.box-footer -->
                     <div class="box-footer">
-                        <form action="#" method="post">
+                        @*<form action="#" method="post">*@
                             <img class="img-responsive img-circle img-sm" src="@Session["ImagePath"]" alt="Alt Text">
                             <!-- .img-push is used to add margin to elements next to floating images -->
-                            <div class="img-push">
-                                <input type="text" class="form-control input-sm" placeholder="Press enter to post comment">
-                                <button type="button" id="addComment" onclick="comment('@Model.Post.Id')" class="btn btn-info btn-xs"><i class="fa fa-thumbs-o-up"></i></button>
+                            <div class="img-push" id="">
+                                <input type="text" class="form-control input-sm" placeholder="Press enter to post comment" id="comment">
+                                <button type="button" id="addComment" onclick="comment('@Model.Post.Id')" class="btn btn-info btn-xs"><i class="fa fa-send-o"></i></button>
                                 <span id="message" style="display:none">Have commments</span>
                             </div>
-                        </form>
+                        @*</form>*@
                     </div>
                     <!-- /.box-footer -->
                 </div>
@@ -117,7 +117,7 @@
                     $("#message" + id).removeAttr("");
                     $("#like").remove();
                     $("#message" + id).html("");
-                    $("#message" + id).append(data.userMassage);
+                    $("#message" + id).append(data.userMessage);
                     $("#commentcount").hide().fadeOut(2000);
                     $("#articleList").append("<span class='pull-right text-muted' id='commentcount'>" + data.Likes + " likes " + data.Comments + " comments</span>");
                 }
@@ -125,7 +125,7 @@
                     $("#message" + id).removeAttr("");
                     $("#like").remove();
                     $("#message" + id).html("");
-                    $("#message" + id).append(data.userMassage);
+                    $("#message" + id).append(data.userMessage);
                 }  
             }
         });
@@ -133,9 +133,6 @@
 
     function comment(postId) {
         var commentText = $("#comment").val()
-        //var firstName = $("#firtsname").val()
-        //var lastName = $("#lastname").val()
-        //var userName = $("#username").val()
         $.ajax({
             type: "POST",
             dataType: "Json",

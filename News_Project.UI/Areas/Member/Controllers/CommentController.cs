@@ -63,5 +63,24 @@ namespace News_Project.UI.Areas.Member.Controllers
                 LikeCount = _likeRepository.GetDefault(x => x.PostId == postId && x.Status != Status.Passive).Count,
             }, JsonRequestBehavior.AllowGet);
         }
+        public JsonResult DeleteComment(int id)
+        {
+            int userId = _appUserRepository.FindByUserName(HttpContext.User.Identity.Name).Id;
+            Comment comment = _commentRepository.GetById(id);
+            bool isDelete = false;
+            if (comment.AppUserId==userId)
+            {
+                isDelete = true;
+                _commentRepository.Remove(id);
+                return Json(isDelete, JsonRequestBehavior.AllowGet);
+
+                //bool tipinde bir alan tanımlamamın sebebi tamamen Json yanında 2 parametre istediği için kurtarıcı olrak bir alan tanımladım back end'e bir etkisi yok.
+            }
+            else
+            {
+                isDelete = false;
+                return Json(isDelete, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }

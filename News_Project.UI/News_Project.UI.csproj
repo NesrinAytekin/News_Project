@@ -133,12 +133,14 @@
     <Compile Include="Areas\Admin\Data\VM\UpdatePostVM.cs" />
     <Compile Include="Areas\Member\Controllers\CommentController.cs" />
     <Compile Include="Areas\Member\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Member\Controllers\LikeController.cs" />
     <Compile Include="Areas\Member\Controllers\PostController.cs" />
     <Compile Include="Areas\Member\Data\DTO\AppUserDTO.cs" />
     <Compile Include="Areas\Member\Data\DTO\CommentDTO.cs" />
     <Compile Include="Areas\Member\Data\DTO\LikeDTO.cs" />
     <Compile Include="Areas\Member\Data\DTO\PostDTO.cs" />
     <Compile Include="Areas\Member\Data\VM\HomePageVM.cs" />
+    <Compile Include="Areas\Member\Data\VM\JsonLikeVM.cs" />
     <Compile Include="Areas\Member\Data\VM\PostDetailVM.cs" />
     <Compile Include="Areas\Member\MemberAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -195,6 +197,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Member\Views\Comment\" />
+    <Folder Include="Areas\Member\Views\Like\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\News_Project.Entity\News_Project.Entity.csproj">
